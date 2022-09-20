@@ -1,7 +1,7 @@
 from vec import vec2, vec3
-from perlin import Perlin2D, PerlinAccessor2D
+from perlin import Perlin2D, PerlinAccessor
 
-landscape = PerlinAccessor2D(Perlin2D(31415926), 100)
+landscape = PerlinAccessor(Perlin2D(31415926), 100)
 
 print(landscape.valueAt(vec2(20, 99)))
 print("-----")

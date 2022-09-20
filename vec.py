@@ -6,7 +6,7 @@ class vec2:
 		self.y = y
 
 	def mag(self):
-		return sqrt(self.x ** 2 + self.y ** 2)
+		return sqrt(self.x * self.x + self.y * self.y)
 	
 	def __add__(self, other):
 		return vec2(self.x + other.x, self.y + other.y)
@@ -19,6 +19,9 @@ class vec2:
 
 	def __truediv__(self, scale):
 		return vec2(self.x / scale, self.y / scale)
+	
+	def __pow__(self, exp):
+		return vec2(self.x ** exp, self.y ** exp)
 
 	def dot(self, other):
 		return self.x * other.x + self.y * other.y
@@ -37,7 +40,7 @@ class vec3:
 		self.z = z
 
 	def mag(self):
-		return sqrt(self.x ** 2 + self.y ** 2 + self.x ** 2)
+		return sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 	
 	def __add__(self, other):
 		return vec3(self.x + other.x, self.y + other.y, self.z + other.z)
@@ -50,6 +53,9 @@ class vec3:
 
 	def __truediv__(self, scale):
 		return vec3(self.x / scale, self.y / scale, self.z / scale)
+	
+	def __pow__(self, exp):
+		return vec3(self.x ** exp, self.y ** exp, self.z ** exp)
 
 	def dot(self, other):
 		return self.x * other.x + self.y * other.y + self.z * other.z
@@ -61,4 +67,7 @@ class vec3:
 		return vec3(floor(self.x), floor(self.y), floor(self.z))
 
 	def toRGB(self):
-		return f"#{'{0:x}'.format(int(self.x * 255)).zfill(2)}{'{0:x}'.format(int(self.y * 255)).zfill(2)}{'{0:x}'.format(int(self.z * 255)).zfill(2)}"
+		x = int(max(min(self.x, 1.0), 0.0) * 255)
+		y = int(max(min(self.y, 1.0), 0.0) * 255)
+		z = int(max(min(self.z, 1.0), 0.0) * 255)
+		return f"#{'{0:x}'.format(x).zfill(2)}{'{0:x}'.format(y).zfill(2)}{'{0:x}'.format(z).zfill(2)}"
