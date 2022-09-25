@@ -107,6 +107,15 @@ namespace Logic
             return this / this.mag();
         }
 
+        public Vec3 clampToColor()
+        {
+            return new Vec3(
+                Math.Max(Math.Min(Math.Floor(this.x * 255), 255), 0),
+                Math.Max(Math.Min(Math.Floor(this.y * 255), 255), 0),
+                Math.Max(Math.Min(Math.Floor(this.z * 255), 255), 0)
+            );
+        }
+
         public Color toColour()
         {
             return Color.FromArgb(

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,25 +36,26 @@ namespace WinFormsApp1
             landscape = new PerlinAccessor3d(landscapeAccessor);
 
             bmp = new Bitmap(w, h);
-            for (int i = 0; i < w; i++)
-                for (int j = 0; j < h; j++)
-                {
-                    double l = Math.Pow((1.02 - Math.Abs(landscape.valueAt(i, j, t))), 20);
-                    bmp.SetPixel(i, j, new Vec3(l, l * 0.9, l * 1.3).toColour());
-                }
-
-            canvas.Image = bmp;
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private unsafe void timer_Tick(object sender, EventArgs e)
         {
-            t++;
-            for (int i = 0; i < w; i++)
-                for (int j = 0; j < h; j++)
+            t += 5;
+            BitmapData tmpBmp = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            for (int y = 0; y < h; y++)
+            {
+                byte* tmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
+                for (int x = 0; x < w; x++)
                 {
-                    double l = Math.Pow((1.02 - Math.Abs(landscape.valueAt(i, j, t))), 20);
-                    bmp.SetPixel(i, j, new Vec3(l, l * 0.9, l * 1.3).toColour());
+                    double l = Math.Pow((1.02 - Math.Abs(landscape.valueAt(x, y, t))), 20);
+                    Vec3 colorVec = new Vec3(l, l * 0.9, l * 1.2).clampToColor();
+                    tmpRow[x * 4] = Convert.ToByte(colorVec.z);
+                    tmpRow[x * 4 + 1] = Convert.ToByte(colorVec.y);
+                    tmpRow[x * 4 + 2] = Convert.ToByte(colorVec.x);
+                    tmpRow[x * 4 + 3] = 255;
                 }
+            }
+            bmp.UnlockBits(tmpBmp);
 
             canvas.Image = bmp;
         }
