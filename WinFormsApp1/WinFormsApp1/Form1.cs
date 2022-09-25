@@ -17,9 +17,21 @@ namespace WinFormsApp1
             InitializeComponent();
         }
 
+        static int w;
+        static int h;
+        static Bitmap bmp = new Bitmap(0, 0);
+        static Graphics g = Graphics.FromImage(new Bitmap(0, 0));
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            w = canvas.Width;
+            h = canvas.Height;
+            bmp = new Bitmap(w, h);
+            g = Graphics.FromImage(bmp);
+        }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
         }
     }
 }
