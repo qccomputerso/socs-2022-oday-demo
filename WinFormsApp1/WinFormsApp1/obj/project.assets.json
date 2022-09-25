@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0-windows7.0": {}
+    "net6.0-windows7.0": {
+      "Logic/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Logic.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Logic.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Logic/1.0.0": {
+      "type": "project",
+      "path": "../Logic/Logic.csproj",
+      "msbuildProject": "../Logic/Logic.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0-windows7.0": []
+    "net6.0-windows7.0": [
+      "Logic >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\user\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\user\\Documents\\GitHub\\socs-2022-oday-demo\\WinFormsApp1\\Logic\\Logic.csproj": {
+              "projectPath": "C:\\Users\\user\\Documents\\GitHub\\socs-2022-oday-demo\\WinFormsApp1\\Logic\\Logic.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

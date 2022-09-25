@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.canvas = new System.Windows.Forms.PictureBox();
-            this.timer = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,9 +43,12 @@
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             // 
-            // timer
+            // timer1
             // 
-            this.timer.Interval = 16;
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 16;
+            this.timer1.Tag = "timer1";
+            this.timer1.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // Form1
             // 
@@ -64,6 +67,6 @@
         #endregion
 
         private PictureBox canvas;
-        private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Timer timer1;
     }
 }

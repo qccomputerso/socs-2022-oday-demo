@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{FCB1997F-3FF4-4C05-B683-EBDA24C8A8ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerlinDemo", "WinFormsApp1\PerlinDemo.csproj", "{FCB1997F-3FF4-4C05-B683-EBDA24C8A8ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{1946EF28-9C96-4B12-976F-516FB528DA0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{FCB1997F-3FF4-4C05-B683-EBDA24C8A8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCB1997F-3FF4-4C05-B683-EBDA24C8A8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB1997F-3FF4-4C05-B683-EBDA24C8A8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1946EF28-9C96-4B12-976F-516FB528DA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1946EF28-9C96-4B12-976F-516FB528DA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1946EF28-9C96-4B12-976F-516FB528DA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1946EF28-9C96-4B12-976F-516FB528DA0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
