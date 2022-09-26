@@ -5,7 +5,7 @@ namespace Logic
     public class Perlin2d
     {
         int seed;
-        Dictionary<string, Vec2> points = new Dictionary<string, Vec2>();
+        Dictionary<long, Vec2> points = new Dictionary<long, Vec2>();
 
         private static double PRNG(double a, double b, int seed)
         {
@@ -22,7 +22,7 @@ namespace Logic
 
         public Vec2 grad(Vec2 p)
         {
-            string key = $"{p.x}/{p.y}";
+            long key = (Convert.ToInt64(p.x) << 32) + Convert.ToInt64(p.y);
             if (!this.points.ContainsKey(key))
             {
                 this.points.Add(key, new Vec2(
@@ -63,7 +63,7 @@ namespace Logic
     public class Perlin3d
     {
         int seed;
-        Dictionary<string, Vec3> points = new Dictionary<string, Vec3>();
+        Dictionary<long, Vec3> points = new Dictionary<long, Vec3>();
 
         private static double PRNG(double a, double b, double c, int seed)
         {
@@ -80,7 +80,7 @@ namespace Logic
 
         public Vec3 grad(Vec3 p)
         {
-            string key = $"{p.x}/{p.y}/{p.z}";
+            long key = (Convert.ToInt64(p.x) << 48) + (Convert.ToInt64(p.y) << 24) + Convert.ToInt64(p.z);
             if (!this.points.ContainsKey(key))
             {
                 this.points.Add(key, new Vec3(
