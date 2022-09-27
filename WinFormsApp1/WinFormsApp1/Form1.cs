@@ -28,17 +28,51 @@ namespace WinFormsApp1
         static int h;
         static int t = 0;
         static PerlinAccessor3d energyEffect;
+        class VectorField
+        {
+            PerlinAccessor3d x;
+            PerlinAccessor3d y;
+            public VectorField(PerlinAccessor3d x, PerlinAccessor3d y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public Vec2 valueAt(int x, int y, int z)
+            {
+                return new Vec2(this.x.valueAt(x, y, z), this.y.valueAt(x, y, z));
+            }
+        }
+        static VectorField screensaverEffect;
         static Bitmap bmp;
 
         private void Form1_Load(object sender, EventArgs e)
         {
             w = canvas.Width;
             h = canvas.Height;
+            Random random = new Random();
             Accessor<Perlin3d>[] energyEffectAccessor = {
-                new Accessor<Perlin3d>(new Perlin3d(31415926), 97, 0.6),
-                new Accessor<Perlin3d>(new Perlin3d(314259), 55, 0.4),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 314159)), 97, 0.6),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 414159)), 55, 0.4),
             };
             energyEffect = new PerlinAccessor3d(energyEffectAccessor);
+
+            Accessor<Perlin3d>[] screensaverEffectAccessorX = {
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 354159)), 97, 0.5),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 454159)), 63, 0.25),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 554159)), 44, 0.15),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 654159)), 29, 0.1),
+            };
+            Accessor<Perlin3d>[] screensaverEffectAccessorY = {
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 374159)), 97, 0.5),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 474159)), 63, 0.25),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 574159)), 44, 0.15),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 674159)), 29, 0.1),
+            };
+            screensaverEffect = new VectorField(
+                new PerlinAccessor3d(screensaverEffectAccessorX),
+                new PerlinAccessor3d(screensaverEffectAccessorY)
+            );
 
             bmp = new Bitmap(w, h);
         }
