@@ -29,7 +29,15 @@ namespace Logic
         public static Vec2 operator +(Vec2 a, Vec2 b)
             => new Vec2(a.x + b.x, a.y + b.y);
         public static Vec2 operator -(Vec2 a, Vec2 b)
-            => a + (-b);
+            => new Vec2(a.x - b.x, a.y - b.y);
+        public static Vec2 operator +(Vec2 a, Vec2Int b)
+            => new Vec2(a.x + b.x, a.y + b.y);
+        public static Vec2 operator -(Vec2 a, Vec2Int b)
+            => new Vec2(a.x - b.x, a.y - b.y);
+        public static Vec2 operator +(Vec2Int a, Vec2 b)
+            => new Vec2(a.x + b.x, a.y + b.y);
+        public static Vec2 operator -(Vec2Int a, Vec2 b)
+            => new Vec2(a.x - b.x, a.y - b.y);
         public static Vec2 operator *(Vec2 a, double b)
             => new Vec2(a.x * b, a.y * b);
         public static Vec2 operator *(Vec2 a, int b)
@@ -47,10 +55,54 @@ namespace Logic
         {
             return this.x * b.x + this.y * b.y;
         }
+        public double dot(Vec2Int b)
+        {
+            return this.x * b.x + this.y * b.y;
+        }
 
         public Vec2 normalize()
         {
             return this / this.mag();
+        }
+    }
+    public class Vec2Int
+    {
+        public int x;
+        public int y;
+
+        public Vec2Int(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int mag2()
+        {
+            return this.x * this.x + this.y * this.y;
+        }
+
+        public double mag()
+        {
+            return Math.Sqrt(this.mag2());
+        }
+
+        public static Vec2Int operator +(Vec2Int a) => a;
+        public static Vec2Int operator -(Vec2Int a) => new Vec2Int(-a.x, -a.y);
+        public static Vec2Int operator +(Vec2Int a, Vec2Int b)
+            => new Vec2Int(a.x + b.x, a.y + b.y);
+        public static Vec2Int operator -(Vec2Int a, Vec2Int b)
+            => new Vec2Int(a.x - b.x, a.y - b.y);
+        public static Vec2Int operator *(Vec2Int a, int b)
+            => new Vec2Int(a.x * b, a.y * b);
+
+        public int dot(Vec2Int b)
+        {
+            return this.x * b.x + this.y * b.y;
+        }
+
+        public double dot(Vec2 b)
+        {
+            return this.x * b.x + this.y * b.y;
         }
     }
 
@@ -82,7 +134,15 @@ namespace Logic
         public static Vec3 operator +(Vec3 a, Vec3 b)
             => new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
         public static Vec3 operator -(Vec3 a, Vec3 b)
-            => a + (-b);
+            => new Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+        public static Vec3 operator +(Vec3 a, Vec3Int b)
+            => new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vec3 operator -(Vec3 a, Vec3Int b)
+            => new Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
+        public static Vec3 operator +(Vec3Int a, Vec3 b)
+            => new Vec3(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vec3 operator -(Vec3Int a, Vec3 b)
+            => new Vec3(a.x - b.x, a.y - b.y, a.z - b.z);
         public static Vec3 operator *(Vec3 a, double b)
             => new Vec3(a.x * b, a.y * b, a.z * b);
         public static Vec3 operator *(Vec3 a, int b)
@@ -98,6 +158,10 @@ namespace Logic
         }
 
         public double dot(Vec3 b)
+        {
+            return this.x * b.x + this.y * b.y + this.z * b.z;
+        }
+        public double dot(Vec3Int b)
         {
             return this.x * b.x + this.y * b.y + this.z * b.z;
         }
@@ -123,6 +187,49 @@ namespace Logic
                 Convert.ToInt32(Math.Max(Math.Min(Math.Floor(this.y * 255), 255), 0)),
                 Convert.ToInt32(Math.Max(Math.Min(Math.Floor(this.z * 255), 255), 0))
             );
+        }
+    }
+
+    public class Vec3Int
+    {
+        public int x;
+        public int y;
+        public int z;
+
+        public Vec3Int(int x, int y, int z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public int mag2()
+        {
+            return this.x * this.x + this.y * this.y + this.z * this.z;
+        }
+
+        public double mag()
+        {
+            return Math.Sqrt(this.mag2());
+        }
+
+        public static Vec3Int operator +(Vec3Int a) => a;
+        public static Vec3Int operator -(Vec3Int a) => new Vec3Int(-a.x, -a.y, -a.z);
+        public static Vec3Int operator +(Vec3Int a, Vec3Int b)
+            => new Vec3Int(a.x + b.x, a.y + b.y, a.z + b.z);
+        public static Vec3Int operator -(Vec3Int a, Vec3Int b)
+            => new Vec3Int(a.x - b.x, a.y - b.y, a.z - b.z);
+        public static Vec3Int operator *(Vec3Int a, int b)
+            => new Vec3Int(a.x * b, a.y * b, a.z * b);
+
+        public int dot(Vec3Int b)
+        {
+            return this.x * b.x + this.y * b.y + this.z * b.z;
+        }
+
+        public double dot(Vec3 b)
+        {
+            return this.x * b.x + this.y * b.y + this.z * b.z;
         }
     }
 }

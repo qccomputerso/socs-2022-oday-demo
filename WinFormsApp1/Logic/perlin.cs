@@ -20,9 +20,9 @@ namespace Logic
             this.seed = seed;
         }
 
-        public Vec2 grad(Vec2 p)
+        public Vec2 grad(Vec2Int p)
         {
-            long key = (Convert.ToInt64(p.x) << 32) + Convert.ToInt64(p.y);
+            long key = (p.x << 32) + p.y;
             if (!this.points.ContainsKey(key))
             {
                 this.points.Add(key, new Vec2(
@@ -39,10 +39,10 @@ namespace Logic
         }
         public double valueAt(Vec2 p)
         {
-            Vec2 p0 = new Vec2(Math.Floor(p.x), Math.Floor(p.y));
-            Vec2 p1 = p0 + new Vec2(1, 0);
-            Vec2 p2 = p0 + new Vec2(0, 1);
-            Vec2 p3 = p0 + new Vec2(1, 1);
+            Vec2Int p0 = new Vec2Int(Convert.ToInt32(Math.Floor(p.x)), Convert.ToInt32(Math.Floor(p.y)));
+            Vec2Int p1 = p0 + new Vec2Int(1, 0);
+            Vec2Int p2 = p0 + new Vec2Int(0, 1);
+            Vec2Int p3 = p0 + new Vec2Int(1, 1);
 
             Vec2 g0 = grad(p0);
             Vec2 g1 = grad(p1);
@@ -78,9 +78,9 @@ namespace Logic
             this.seed = seed;
         }
 
-        public Vec3 grad(Vec3 p)
+        public Vec3 grad(Vec3Int p)
         {
-            long key = (Convert.ToInt64(p.x) << 48) + (Convert.ToInt64(p.y) << 24) + Convert.ToInt64(p.z);
+            long key = (p.x << 48) + (p.y << 24) + p.z;
             if (!this.points.ContainsKey(key))
             {
                 this.points.Add(key, new Vec3(
@@ -98,14 +98,14 @@ namespace Logic
         }
         public double valueAt(Vec3 p)
         {
-            Vec3 p0 = new Vec3(Math.Floor(p.x), Math.Floor(p.y), Math.Floor(p.z));
-            Vec3 p1 = p0 + new Vec3(1, 0, 0);
-            Vec3 p2 = p0 + new Vec3(0, 1, 0);
-            Vec3 p3 = p0 + new Vec3(1, 1, 0);
-            Vec3 p4 = p0 + new Vec3(0, 0, 1);
-            Vec3 p5 = p0 + new Vec3(1, 0, 1);
-            Vec3 p6 = p0 + new Vec3(0, 1, 1);
-            Vec3 p7 = p0 + new Vec3(1, 1, 1);
+            Vec3Int p0 = new Vec3Int(Convert.ToInt32(Math.Floor(p.x)), Convert.ToInt32(Math.Floor(p.y)), Convert.ToInt32(Math.Floor(p.z)));
+            Vec3Int p1 = p0 + new Vec3Int(1, 0, 0);
+            Vec3Int p2 = p0 + new Vec3Int(0, 1, 0);
+            Vec3Int p3 = p0 + new Vec3Int(1, 1, 0);
+            Vec3Int p4 = p0 + new Vec3Int(0, 0, 1);
+            Vec3Int p5 = p0 + new Vec3Int(1, 0, 1);
+            Vec3Int p6 = p0 + new Vec3Int(0, 1, 1);
+            Vec3Int p7 = p0 + new Vec3Int(1, 1, 1);
 
             Vec3 g0 = grad(p0);
             Vec3 g1 = grad(p1);
