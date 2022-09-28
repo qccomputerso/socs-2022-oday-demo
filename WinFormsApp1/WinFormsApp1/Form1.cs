@@ -52,8 +52,8 @@ namespace WinFormsApp1
             h = canvas.Height;
             Random random = new Random();
             Accessor<Perlin3d>[] energyEffectAccessor = {
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 314159)), 97, 0.6),
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 414159)), 55, 0.4),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 314159)), 63, 0.65),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 414159)), 35, 0.35),
             };
             energyEffect = new PerlinAccessor3d(energyEffectAccessor);
 
@@ -99,8 +99,8 @@ namespace WinFormsApp1
                 byte* tmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
                 for (int x = 0; x < w; x++)
                 {
-                    double l = Math.Pow((1.01 - Math.Abs(energyEffect.valueAt(x, y, t * 5))), 30);
-                    Vec3 colorVec = new Vec3(l, l * 0.9, l * 1.2).clampToColor();
+                    double l = Math.Pow((1.01 - Math.Abs(energyEffect.valueAt(x, y, t * 1.2))), 30);
+                    Vec3 colorVec = new Vec3(l, l * 0.8, l * 1.1).clampToColor();
                     tmpRow[x * 4] = Convert.ToByte(colorVec.z);
                     tmpRow[x * 4 + 1] = Convert.ToByte(colorVec.y);
                     tmpRow[x * 4 + 2] = Convert.ToByte(colorVec.x);

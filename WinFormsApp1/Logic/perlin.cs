@@ -9,7 +9,10 @@ namespace Logic
 
         private static double PRNG(double a, double b, int seed)
         {
-            double d = (Math.Abs(a) * 100 + Math.Abs(b) * 100 + 2000) * seed * 15485863;
+            double d = (
+                (Math.Abs(a * a * a) * 100 + 1000) *
+                (Math.Abs(b * b * b) * 100 + 1000)
+            ) * seed * 15485863;
             return (d * d * d % 2038074743) / 2038074743;
         }
 
@@ -28,7 +31,7 @@ namespace Logic
                 this.points.Add(key, new Vec2(
                     PRNG(p.x, p.y, this.seed) * 2 - 1,
                     PRNG(p.x, p.y, this.seed + 100) * 2 - 1
-                ));
+                ).normalize());
             }
             return this.points.GetValueOrDefault(key, new Vec2(0, 0));
         }
@@ -67,7 +70,11 @@ namespace Logic
 
         private static double PRNG(double a, double b, double c, int seed)
         {
-            double d = (Math.Abs(a) * 100 + Math.Abs(b) * 100 + Math.Abs(c) * 100 + 3000) * seed * 15485863;
+            double d = (
+                (Math.Abs(a * a * a) * 100 + 1000) *
+                (Math.Abs(b * b * b) * 100 + 1000) *
+                (Math.Abs(c * c * c) * 100 + 1000)
+            ) * seed * 15485863;
             return (d * d * d % 2038074743) / 2038074743;
         }
 
@@ -87,7 +94,7 @@ namespace Logic
                     PRNG(p.x, p.y, p.z, this.seed) * 2 - 1,
                     PRNG(p.x, p.y, p.z, this.seed + 100) * 2 - 1,
                     PRNG(p.x, p.y, p.z, this.seed + 200) * 2 - 1
-                ));
+                ).normalize());
             }
             return this.points.GetValueOrDefault(key, new Vec3(0, 0, 0));
         }
@@ -103,9 +110,9 @@ namespace Logic
             Vec3Int p2 = p0 + new Vec3Int(0, 1, 0);
             Vec3Int p3 = p0 + new Vec3Int(1, 1, 0);
             Vec3Int p4 = p0 + new Vec3Int(0, 0, 1);
-            Vec3Int p5 = p0 + new Vec3Int(1, 0, 1);
-            Vec3Int p6 = p0 + new Vec3Int(0, 1, 1);
-            Vec3Int p7 = p0 + new Vec3Int(1, 1, 1);
+            Vec3Int p5 = p4 + new Vec3Int(1, 0, 0);
+            Vec3Int p6 = p4 + new Vec3Int(0, 1, 0);
+            Vec3Int p7 = p4 + new Vec3Int(1, 1, 0);
 
             Vec3 g0 = grad(p0);
             Vec3 g1 = grad(p1);
