@@ -21,7 +21,8 @@ namespace WinFormsApp1
 
         enum PerlinMode
         {
-            energy
+            energy,
+            wind
         }
         static PerlinMode mode = PerlinMode.energy;
         static int w;
@@ -94,13 +95,34 @@ namespace WinFormsApp1
         private unsafe void energyEffectTick()
         {
             BitmapData tmpBmp = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            // Cover the image in black pixels first for optimisation
             for (int y = 0; y < h; y++)
             {
                 byte* tmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
                 for (int x = 0; x < w; x++)
                 {
-                    double l = Math.Pow((1.01 - Math.Abs(energyEffect.valueAt(x, y, t * 1.2))), 30);
-                    Vec3 colorVec = new Vec3(l, l * 0.8, l * 1.1).clampToColor();
+                    tmpRow[x * 4] = 0;
+                    tmpRow[x * 4 + 1] = 0;
+                    tmpRow[x * 4 + 2] = 0;
+                    tmpRow[x * 4 + 3] = 255;
+                }
+            }
+
+            // Actually calculating what colour the pixels should be
+            for (int y = 0; y < h; y++)
+            {
+                byte* tmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
+                for (int x = 0; x < w; x++)
+                {
+                    double v = Math.Abs(energyEffect.valueAt(x, y, t));
+                    // Skip the calculation ahead to avoid repeatedly calculating black pixels to improve performance
+                    if (v > 0.1)
+                    {
+                        x += Convert.ToInt32(30 * v);
+                        continue;
+                    }
+                    double l = Math.Pow((1.01 - v), 40);
+                    Vec3 colorVec = new Vec3(l * 0.95, l * 0.75, l * 1.1).clampToColor();
                     tmpRow[x * 4] = Convert.ToByte(colorVec.z);
                     tmpRow[x * 4 + 1] = Convert.ToByte(colorVec.y);
                     tmpRow[x * 4 + 2] = Convert.ToByte(colorVec.x);

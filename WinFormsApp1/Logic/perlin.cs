@@ -154,10 +154,28 @@ namespace Logic
     public class PerlinAccessor2d
     {
         Accessor<Perlin2d>[] accessors;
+        Dictionary<double, Dictionary<double, double>> cache;
+        bool isCaching = false;
 
         public PerlinAccessor2d(Accessor<Perlin2d>[] accessors)
         {
             this.accessors = accessors;
+            this.cache = new Dictionary<double, Dictionary<double, double>>();
+        }
+
+        public void startCache()
+        {
+            this.isCaching = true;
+        }
+
+        public void stopCache()
+        {
+            this.isCaching = false;
+        }
+
+        public void clearCache()
+        {
+            this.cache = new Dictionary<double, Dictionary<double, double>>();
         }
 
         public double valueAt(double x, double y)
@@ -166,11 +184,23 @@ namespace Logic
         }
         public double valueAt(Vec2 p)
         {
+            if (this.cache.ContainsKey(p.x) && this.cache[p.x].ContainsKey(p.y))
+            {
+                return this.cache[p.x][p.y];
+            }
             double v = 0;
             for (int i = 0; i < accessors.Length; i++)
             {
                 Accessor<Perlin2d> accessor = accessors[i];
                 v += accessor.perlin.valueAt(p / accessor.interval) * accessor.weight;
+            }
+            if (this.isCaching)
+            {
+                if (!this.cache.ContainsKey(p.x))
+                {
+                    this.cache.Add(p.x, new Dictionary<double, double>());
+                }
+                this.cache[p.x].Add(p.y, v);
             }
             return v;
         }
@@ -178,10 +208,28 @@ namespace Logic
     public class PerlinAccessor3d
     {
         Accessor<Perlin3d>[] accessors;
+        Dictionary<double, Dictionary<double, Dictionary<double, double>>> cache;
+        bool isCaching = false;
 
         public PerlinAccessor3d(Accessor<Perlin3d>[] accessors)
         {
             this.accessors = accessors;
+            this.cache = new Dictionary<double, Dictionary<double, Dictionary<double, double>>>();
+        }
+
+        public void startCache()
+        {
+            this.isCaching = true;
+        }
+
+        public void stopCache()
+        {
+            this.isCaching = false;
+        }
+
+        public void clearCache()
+        {
+            this.cache = new Dictionary<double, Dictionary<double, Dictionary<double, double>>>();
         }
 
         public double valueAt(double x, double y, double z)
@@ -190,11 +238,27 @@ namespace Logic
         }
         public double valueAt(Vec3 p)
         {
+            if (this.cache.ContainsKey(p.x) && this.cache[p.x].ContainsKey(p.y) && this.cache[p.x][p.y].ContainsKey(p.z))
+            {
+                return this.cache[p.x][p.y][p.z];
+            }
             double v = 0;
             for (int i = 0; i < accessors.Length; i++)
             {
                 Accessor<Perlin3d> accessor = accessors[i];
                 v += accessor.perlin.valueAt(p / accessor.interval) * accessor.weight;
+            }
+            if (this.isCaching)
+            {
+                if (!this.cache.ContainsKey(p.x))
+                {
+                    this.cache.Add(p.x, new Dictionary<double, Dictionary<double, double>>());
+                }
+                if (!this.cache[p.x].ContainsKey(p.y))
+                {
+                    this.cache[p.x].Add(p.y, new Dictionary<double, double>());
+                }
+                this.cache[p.x][p.y].Add(p.z, v);
             }
             return v;
         }
