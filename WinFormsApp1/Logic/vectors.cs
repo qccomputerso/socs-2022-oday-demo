@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Logic
 {
-    public class Vec2
+    public struct Vec2
     {
         public double x;
         public double y;
@@ -65,7 +65,7 @@ namespace Logic
             return this / this.mag();
         }
     }
-    public class Vec2Int
+    public struct Vec2Int
     {
         public int x;
         public int y;
@@ -106,7 +106,7 @@ namespace Logic
         }
     }
 
-    public class Vec3
+    public struct Vec3
     {
         public double x;
         public double y;
@@ -190,7 +190,7 @@ namespace Logic
         }
     }
 
-    public class Vec3Int
+    public struct Vec3Int
     {
         public int x;
         public int y;
