@@ -31,13 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.canvas = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
+            this.debug = new System.Windows.Forms.Label();
+            this.buttonEnergyEffect = new System.Windows.Forms.Button();
+            this.buttonWindEffect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
             // canvas
             // 
-            this.canvas.Location = new System.Drawing.Point(240, 60);
+            this.canvas.Location = new System.Drawing.Point(12, 44);
             this.canvas.Margin = new System.Windows.Forms.Padding(0);
             this.canvas.Name = "canvas";
             this.canvas.Size = new System.Drawing.Size(480, 320);
@@ -51,21 +53,47 @@
             this.timer1.Tag = "timer1";
             this.timer1.Tick += new System.EventHandler(this.timer_Tick);
             // 
-            // label1
+            // debug
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(451, 416);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "label1";
+            this.debug.AutoSize = true;
+            this.debug.Location = new System.Drawing.Point(451, 416);
+            this.debug.Name = "debug";
+            this.debug.Size = new System.Drawing.Size(0, 20);
+            this.debug.TabIndex = 1;
+            // 
+            // buttonEnergyEffect
+            // 
+            this.buttonEnergyEffect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(74)))), ((int)(((byte)(84)))));
+            this.buttonEnergyEffect.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.buttonEnergyEffect.Location = new System.Drawing.Point(12, 12);
+            this.buttonEnergyEffect.Name = "buttonEnergyEffect";
+            this.buttonEnergyEffect.Size = new System.Drawing.Size(154, 29);
+            this.buttonEnergyEffect.TabIndex = 2;
+            this.buttonEnergyEffect.Text = "Mode: Energy Effect";
+            this.buttonEnergyEffect.UseVisualStyleBackColor = false;
+            this.buttonEnergyEffect.Click += new System.EventHandler(this.buttonEnergyEffect_Click);
+            // 
+            // buttonWindEffect
+            // 
+            this.buttonWindEffect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(74)))), ((int)(((byte)(84)))));
+            this.buttonWindEffect.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.buttonWindEffect.Location = new System.Drawing.Point(172, 12);
+            this.buttonWindEffect.Name = "buttonWindEffect";
+            this.buttonWindEffect.Size = new System.Drawing.Size(143, 29);
+            this.buttonWindEffect.TabIndex = 3;
+            this.buttonWindEffect.Text = "Mode: Wind Effect";
+            this.buttonWindEffect.UseVisualStyleBackColor = false;
+            this.buttonWindEffect.Click += new System.EventHandler(this.buttonWindEffect_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(34)))), ((int)(((byte)(54)))));
             this.ClientSize = new System.Drawing.Size(942, 593);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.buttonWindEffect);
+            this.Controls.Add(this.buttonEnergyEffect);
+            this.Controls.Add(this.debug);
             this.Controls.Add(this.canvas);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(960, 640);
@@ -84,6 +112,8 @@
 
         private PictureBox canvas;
         private System.Windows.Forms.Timer timer1;
-        private Label label1;
+        private Label debug;
+        private Button buttonEnergyEffect;
+        private Button buttonWindEffect;
     }
 }

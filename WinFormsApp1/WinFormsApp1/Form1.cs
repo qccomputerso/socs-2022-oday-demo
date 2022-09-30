@@ -21,10 +21,11 @@ namespace WinFormsApp1
 
         enum PerlinMode
         {
+            none,
             energy,
             wind
         }
-        static PerlinMode mode = PerlinMode.wind;
+        static PerlinMode mode = PerlinMode.none;
         static int w;
         static int h;
         static int t = 0;
@@ -67,10 +68,9 @@ namespace WinFormsApp1
                 new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 654159)), 29, 0.1),
             };
             Accessor<Perlin3d>[] windEffectAccessorY = {
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 374159)), 97, 0.6),
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 474159)), 63, 0.2),
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 574159)), 44, 0.15),
-                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 674159)), 29, 0.05),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 374159)), 127, 0.65),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 474159)), 93, 0.2),
+                new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 574159)), 74, 0.15),
             };
             windEffect = new VectorField(
                 new PerlinAccessor3d(windEffectAccessorX),
@@ -98,7 +98,7 @@ namespace WinFormsApp1
                     break;
             }
 
-            label1.Text = debugText;
+            debug.Text = debugText;
 
             canvas.Image = bmp;
             canvas.Update();
@@ -175,7 +175,7 @@ namespace WinFormsApp1
                 public void update()
                 {
                     Vec2 v = windEffect.valueAt(this.pos.x, this.pos.y, t / 3);
-                    double theta = v.y * Math.PI * 4;
+                    double theta = Math.Pow(Math.Abs(v.y), 0.4) * Math.PI * 4;
                     double mag = Math.Abs(v.x) * 0.13 + 0.06;
                     this.vel += new Vec2(mag * Math.Cos(theta), mag * Math.Sin(theta));
                     this.vel *= 0.97;
@@ -242,6 +242,18 @@ namespace WinFormsApp1
                     }
                 }
             }
+        }
+
+        private void buttonEnergyEffect_Click(object sender, EventArgs e)
+        {
+            mode = PerlinMode.energy;
+            EnergyEffect.initialize();
+        }
+
+        private void buttonWindEffect_Click(object sender, EventArgs e)
+        {
+            mode = PerlinMode.wind;
+            WindEffect.initialize();
         }
     }
 }
