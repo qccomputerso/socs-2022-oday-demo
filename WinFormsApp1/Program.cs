@@ -1,4 +1,4 @@
-namespace WinFormsApp1
+namespace PerlinDemoForms
 {
     internal static class Program
     {

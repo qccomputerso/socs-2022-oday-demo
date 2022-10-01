@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WinFormsApp1
+namespace PerlinDemoForms
 {
     public partial class Form1 : Form
     {
@@ -23,13 +24,15 @@ namespace WinFormsApp1
         {
             none,
             energy,
-            wind
+            wind,
+            mountains
         }
         static PerlinMode mode = PerlinMode.none;
         static int w;
         static int h;
         static int t = 0;
         static PerlinAccessor3d energyEffect;
+        static Random random = new Random();
         class VectorField
         {
             PerlinAccessor3d x;
@@ -54,7 +57,6 @@ namespace WinFormsApp1
         {
             w = canvas.Width;
             h = canvas.Height;
-            Random random = new Random();
             Accessor<Perlin3d>[] energyEffectAccessor = {
                 new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 314159)), 63, 0.65),
                 new Accessor<Perlin3d>(new Perlin3d(Convert.ToInt32((random.NextDouble() + 1) * 414159)), 35, 0.35),
@@ -79,7 +81,7 @@ namespace WinFormsApp1
 
             bmp = new Bitmap(w, h);
             g = Graphics.FromImage(bmp);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
             g.Clear(Color.Black);
         }
 
@@ -94,9 +96,13 @@ namespace WinFormsApp1
                 case PerlinMode.wind:
                     WindEffect.update();
                     break;
+                case PerlinMode.mountains:
+                    MountainsEffect.update();
+                    break;
                 default:
                     break;
             }
+            modeLabel.Text = $"Current Mode: {Enum.GetName(typeof(PerlinMode), mode)}";
 
             debug.Text = debugText;
 
@@ -243,6 +249,73 @@ namespace WinFormsApp1
                 }
             }
         }
+        class MountainsEffect
+        {
+            static Vec3[] sunsetGradientPoints = {
+                new Vec3(3, 26, 65),
+                new Vec3(62, 88, 121),
+                new Vec3(155, 165, 174),
+                new Vec3(220, 182, 151),
+                new Vec3(255, 135, 25),
+                new Vec3(221, 114, 60),
+                new Vec3(173, 74, 40),
+                new Vec3(4, 3, 8),
+            };
+
+            static Accessor<Perlin2d>[] mountainsEffectAccessor = {
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 324159)), 127, 0.4),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 424159)), 95, 0.3),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 524159)), 74, 0.2),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 624159)), 51, 0.1),
+            };
+
+            static PerlinAccessor2d mountainsEffect = new PerlinAccessor2d(mountainsEffectAccessor);
+
+            public static void initialize()
+            {
+                g.Clear(Color.Black);
+            }
+
+            public static unsafe void update()
+            {
+                double stride = h * 1.0 / (sunsetGradientPoints.Length - 1);
+                for (int i = 0; i < h; i++)
+                {
+                    Vec3 colour1 = sunsetGradientPoints[i * (sunsetGradientPoints.Length - 1) / h] / 255;
+                    Vec3 colour2 = sunsetGradientPoints[i * (sunsetGradientPoints.Length - 1) / h + 1] / 255;
+                    Vec3 colour = colour1 * (1 - (i % stride) / stride) + colour2 * (i % stride) / stride;
+                    g.FillRectangle(new SolidBrush(colour.toColour()), new Rectangle(0, i, w, 1));
+                }
+
+                BitmapData tmpBmp = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                byte* tmpBmpPtr = (byte*)tmpBmp.Scan0;
+                int w2 = w / 2;
+                int view = t;
+                for (int x = 0; x < w; x++)
+                {
+                    int yMax = h - 1;
+                    int ptrOffset = x * 4;
+                    for (int z = 0; z < 40; z++)
+                    {
+                        int dist = 300 + z * 10;
+                        double brightness = (80 - z) / 80.0;
+                        int v = h - (h / 4 + h * z / 130  +
+                            Convert.ToInt32(mountainsEffect.valueAt(dist, view + (x - w2) * dist / 400) * (h * 0.4))
+                        );
+                        if (v >= yMax) continue;
+                        for (int y = Math.Max(v, 0); y < yMax; y++)
+                        {
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = Convert.ToByte(30 * brightness);
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = Convert.ToByte(85 * brightness);
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = Convert.ToByte(15 * brightness);
+                        }
+                        yMax = v;
+                    }
+                }
+
+                bmp.UnlockBits(tmpBmp);
+            }
+        }
 
         private void buttonEnergyEffect_Click(object sender, EventArgs e)
         {
@@ -254,6 +327,12 @@ namespace WinFormsApp1
         {
             mode = PerlinMode.wind;
             WindEffect.initialize();
+        }
+
+        private void buttonMountainsEffect_Click(object sender, EventArgs e)
+        {
+            mode = PerlinMode.mountains;
+            MountainsEffect.initialize();
         }
     }
 }
