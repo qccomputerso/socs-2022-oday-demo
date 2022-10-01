@@ -88,6 +88,7 @@ namespace PerlinDemoForms
         private void timer_Tick(object sender, EventArgs e)
         {
             t++;
+            checkboxMountainsContour.Visible = mode == PerlinMode.mountains;
             switch (mode)
             {
                 case PerlinMode.energy:
@@ -97,6 +98,7 @@ namespace PerlinDemoForms
                     WindEffect.update();
                     break;
                 case PerlinMode.mountains:
+                    MountainsEffect.useContour = checkboxMountainsContour.Checked;
                     MountainsEffect.update();
                     break;
                 default:
@@ -249,8 +251,11 @@ namespace PerlinDemoForms
                 }
             }
         }
+
         class MountainsEffect
         {
+            public static bool useContour = false;
+
             static Vec3[] sunsetGradientPoints = {
                 new Vec3(3, 26, 65),
                 new Vec3(62, 88, 121),
@@ -293,21 +298,30 @@ namespace PerlinDemoForms
                 int view = t;
                 for (int x = 0; x < w; x++)
                 {
-                    int yMax = h - 1;
+                    int yMax = h;
                     int ptrOffset = x * 4;
                     for (int z = 0; z < 40; z++)
                     {
                         int dist = 300 + z * 10;
-                        double brightness = (80 - z) / 80.0;
-                        int v = h - (h / 4 + h * z / 130  +
-                            Convert.ToInt32(mountainsEffect.valueAt(dist, view + (x - w2) * dist / 400) * (h * 0.4))
+                        double brightness = (70 - z) / 70.0;
+                        int v = h - Convert.ToInt32(h / 4 + h * z / 130  +
+                            mountainsEffect.valueAt(dist, view + (x - w2) * dist / 500) * h * (0.6 - z * 0.007)
                         );
                         if (v >= yMax) continue;
-                        for (int y = Math.Max(v, 0); y < yMax; y++)
+                        if (useContour)
                         {
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = Convert.ToByte(30 * brightness);
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = Convert.ToByte(85 * brightness);
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = Convert.ToByte(15 * brightness);
+                            tmpBmpPtr[v * tmpBmp.Stride + ptrOffset] = 255;
+                            tmpBmpPtr[v * tmpBmp.Stride + ptrOffset + 1] = 255;
+                            tmpBmpPtr[v * tmpBmp.Stride + ptrOffset + 2] = 0;
+                        }
+                        for (int y = Math.Max(v + (useContour ? 1 : 0), 0); y < yMax; y++)
+                        {
+                            byte r = useContour ? (byte)20 : Convert.ToByte(30 * brightness);
+                            byte g = useContour ? (byte)5 : Convert.ToByte(85 * brightness);
+                            byte b = useContour ? (byte)40 : Convert.ToByte(15 * brightness);
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = b;
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = g;
+                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = r;
                         }
                         yMax = v;
                     }

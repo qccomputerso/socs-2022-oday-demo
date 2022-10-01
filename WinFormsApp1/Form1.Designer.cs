@@ -36,6 +36,7 @@
             this.buttonWindEffect = new System.Windows.Forms.Button();
             this.modeLabel = new System.Windows.Forms.Label();
             this.buttonMountainsEffect = new System.Windows.Forms.Button();
+            this.checkboxMountainsContour = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,12 +114,25 @@
             this.buttonMountainsEffect.UseVisualStyleBackColor = false;
             this.buttonMountainsEffect.Click += new System.EventHandler(this.buttonMountainsEffect_Click);
             // 
+            // checkboxMountainsContour
+            // 
+            this.checkboxMountainsContour.AutoSize = true;
+            this.checkboxMountainsContour.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.checkboxMountainsContour.Location = new System.Drawing.Point(12, 398);
+            this.checkboxMountainsContour.Name = "checkboxMountainsContour";
+            this.checkboxMountainsContour.Size = new System.Drawing.Size(195, 24);
+            this.checkboxMountainsContour.TabIndex = 6;
+            this.checkboxMountainsContour.Text = "Show mountains contour";
+            this.checkboxMountainsContour.UseVisualStyleBackColor = true;
+            this.checkboxMountainsContour.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(34)))), ((int)(((byte)(54)))));
             this.ClientSize = new System.Drawing.Size(942, 593);
+            this.Controls.Add(this.checkboxMountainsContour);
             this.Controls.Add(this.buttonMountainsEffect);
             this.Controls.Add(this.modeLabel);
             this.Controls.Add(this.buttonWindEffect);
@@ -147,5 +161,6 @@
         private Button buttonWindEffect;
         private Label modeLabel;
         private Button buttonMountainsEffect;
+        private CheckBox checkboxMountainsContour;
     }
 }
