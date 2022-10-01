@@ -268,10 +268,10 @@ namespace PerlinDemoForms
             };
 
             static Accessor<Perlin2d>[] mountainsEffectAccessor = {
-                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 324159)), 127, 0.4),
-                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 424159)), 95, 0.3),
-                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 524159)), 74, 0.2),
-                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 624159)), 51, 0.1),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 324159)), 137, 0.4),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 424159)), 105, 0.3),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 524159)), 44, 0.2),
+                new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 624159)), 31, 0.1),
             };
 
             static PerlinAccessor2d mountainsEffect = new PerlinAccessor2d(mountainsEffectAccessor);
@@ -279,10 +279,12 @@ namespace PerlinDemoForms
             public static void initialize()
             {
                 g.Clear(Color.Black);
+                mountainsEffect.startCache();
             }
 
             public static unsafe void update()
             {
+                if ((t % 100) == 0) mountainsEffect.clearCache();
                 double stride = h * 1.0 / (sunsetGradientPoints.Length - 1);
                 for (int i = 0; i < h; i++)
                 {
@@ -300,12 +302,15 @@ namespace PerlinDemoForms
                 {
                     int yMax = h;
                     int ptrOffset = x * 4;
-                    for (int z = 0; z < 40; z++)
+                    for (int z = 0; z < 160; z++)
                     {
-                        int dist = 300 + z * 10;
-                        double brightness = (70 - z) / 70.0;
-                        int v = h - Convert.ToInt32(h / 4 + h * z / 130  +
-                            mountainsEffect.valueAt(dist, view + (x - w2) * dist / 500) * h * (0.6 - z * 0.007)
+                        int dist = 280 + z * 4;
+                        double brightness = (160 - z) / 130.0;
+                        int water = z;
+                        int v = h - Convert.ToInt32(water +
+                            Math.Max(0,
+                            mountainsEffect.valueAt(dist, view + (x - w2) * dist / 500) * h * (1 - z * 0.005)
+                            - Math.Max((20 - z) * 5, 0))
                         );
                         if (v >= yMax) continue;
                         if (useContour)
@@ -313,15 +318,31 @@ namespace PerlinDemoForms
                             tmpBmpPtr[v * tmpBmp.Stride + ptrOffset] = 255;
                             tmpBmpPtr[v * tmpBmp.Stride + ptrOffset + 1] = 255;
                             tmpBmpPtr[v * tmpBmp.Stride + ptrOffset + 2] = 0;
+                            for (int y = Math.Max(v + 1, 0); y < yMax; y++)
+                            {
+                                byte r = 20;
+                                byte g = 5;
+                                byte b = 40;
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = b;
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = g;
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = r;
+                            }
                         }
-                        for (int y = Math.Max(v + (useContour ? 1 : 0), 0); y < yMax; y++)
+                        else
                         {
-                            byte r = useContour ? (byte)20 : Convert.ToByte(30 * brightness);
-                            byte g = useContour ? (byte)5 : Convert.ToByte(85 * brightness);
-                            byte b = useContour ? (byte)40 : Convert.ToByte(15 * brightness);
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = b;
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = g;
-                            tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = r;
+                            for (int y = Math.Max(v, 0); y < yMax; y++)
+                            {
+                                Vec3 colour = new Vec3(30, 85, 15);
+                                if (h - y <= water) colour = new Vec3(10, 20, 80);
+                                else if (h - y <= water + 3) colour = new Vec3(50, 60, 30);
+                                colour *= brightness;
+                                byte r = Convert.ToByte(colour.x);
+                                byte g = Convert.ToByte(colour.y);
+                                byte b = Convert.ToByte(colour.z);
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset] = b;
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 1] = g;
+                                tmpBmpPtr[y * tmpBmp.Stride + ptrOffset + 2] = r;
+                            }
                         }
                         yMax = v;
                     }
