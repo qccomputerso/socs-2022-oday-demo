@@ -1,15 +1,6 @@
 using Logic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PerlinDemoForms
 {
@@ -183,7 +174,7 @@ namespace PerlinDemoForms
                 public void update()
                 {
                     Vec2 v = windEffect.valueAt(this.pos.x, this.pos.y, t / 3);
-                    double theta = Math.Pow(Math.Abs(v.y), 0.4) * Math.PI * 4;
+                    double theta = Math.Pow(Math.Abs(v.y), 0.6) * Math.Sign(v.y) * Math.PI * 1.8;
                     double mag = Math.Abs(v.x) * 0.13 + 0.06;
                     this.vel += new Vec2(mag * Math.Cos(theta), mag * Math.Sin(theta));
                     this.vel *= 0.97;
