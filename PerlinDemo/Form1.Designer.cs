@@ -37,6 +37,7 @@
             this.modeLabel = new System.Windows.Forms.Label();
             this.buttonMountainsEffect = new System.Windows.Forms.Button();
             this.checkboxMountainsContour = new System.Windows.Forms.CheckBox();
+            this.buttonTerrainEffect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -126,12 +127,26 @@
             this.checkboxMountainsContour.UseVisualStyleBackColor = true;
             this.checkboxMountainsContour.Visible = false;
             // 
+            // buttonTerrainEffect
+            // 
+            this.buttonTerrainEffect.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(74)))), ((int)(((byte)(84)))));
+            this.buttonTerrainEffect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTerrainEffect.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.buttonTerrainEffect.Location = new System.Drawing.Point(498, 12);
+            this.buttonTerrainEffect.Name = "buttonTerrainEffect";
+            this.buttonTerrainEffect.Size = new System.Drawing.Size(148, 29);
+            this.buttonTerrainEffect.TabIndex = 7;
+            this.buttonTerrainEffect.Text = "Mode: Terrain Gen";
+            this.buttonTerrainEffect.UseVisualStyleBackColor = false;
+            this.buttonTerrainEffect.Click += new System.EventHandler(this.buttonTerrainEffect_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(34)))), ((int)(((byte)(54)))));
             this.ClientSize = new System.Drawing.Size(942, 593);
+            this.Controls.Add(this.buttonTerrainEffect);
             this.Controls.Add(this.checkboxMountainsContour);
             this.Controls.Add(this.buttonMountainsEffect);
             this.Controls.Add(this.modeLabel);
@@ -162,5 +177,6 @@
         private Label modeLabel;
         private Button buttonMountainsEffect;
         private CheckBox checkboxMountainsContour;
+        private Button buttonTerrainEffect;
     }
 }

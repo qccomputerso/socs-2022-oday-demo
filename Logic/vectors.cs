@@ -94,6 +94,8 @@ namespace Logic
             => new Vec2Int(a.x - b.x, a.y - b.y);
         public static Vec2Int operator *(Vec2Int a, int b)
             => new Vec2Int(a.x * b, a.y * b);
+        public static Vec2Int operator /(Vec2Int a, int b)
+            => new Vec2Int(a.x / b, a.y / b);
 
         public int dot(Vec2Int b)
         {
@@ -221,6 +223,8 @@ namespace Logic
             => new Vec3Int(a.x - b.x, a.y - b.y, a.z - b.z);
         public static Vec3Int operator *(Vec3Int a, int b)
             => new Vec3Int(a.x * b, a.y * b, a.z * b);
+        public static Vec3Int operator /(Vec3Int a, int b)
+            => new Vec3Int(a.x / b, a.y / b, a.z / b);
 
         public int dot(Vec3Int b)
         {

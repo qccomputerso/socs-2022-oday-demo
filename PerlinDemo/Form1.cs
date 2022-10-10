@@ -1,4 +1,5 @@
 using Logic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 
@@ -16,7 +17,8 @@ namespace PerlinDemoForms
             none,
             energy,
             wind,
-            mountains
+            mountains,
+            terrain
         }
         static PerlinMode mode = PerlinMode.none;
         static int w;
@@ -343,6 +345,80 @@ namespace PerlinDemoForms
             }
         }
 
+        class TerrainEffect
+        {
+            public static unsafe void newTerrain()
+            {
+                Accessor<Perlin2d>[] heightAccessor = {
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 324159)), 317, 0.65),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 424159)), 105, 0.2),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 524159)), 64, 0.1),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 624159)), 31, 0.05),
+                };
+                PerlinAccessor2d height = new PerlinAccessor2d(heightAccessor);
+                Accessor<Perlin2d>[] rainAccessor = {
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 324159)), 237, 0.65),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 424159)), 105, 0.2),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 524159)), 74, 0.1),
+                    new Accessor<Perlin2d>(new Perlin2d(Convert.ToInt32((random.NextDouble() + 1) * 624159)), 31, 0.05),
+                };
+                PerlinAccessor2d rain = new PerlinAccessor2d(rainAccessor);
+
+                BitmapData tmpBmp = bmp.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+                for (int y = 0; y < h; y++)
+                {
+                    byte* bmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
+                    for (int x = 0; x < w; x++)
+                    {
+                        double hValue = height.valueAt(x, y) + 0.05;
+                        double rValue = rain.valueAt(x, y) + 1;
+                        Vec3Int color;
+                        // ocean
+                        if (hValue < 0) color = new Vec3Int(10, 40, 90);
+                        // beach colour
+                        else if (hValue < 0.02) color = new Vec3Int(180, 190, 140);
+                        else if (hValue < 0.25)
+                        {
+                            // desert colour
+                            if (rValue < 0.7) color = new Vec3Int(180, 170, 140);
+                            // grassland colour
+                            else if (rValue < 1) color = new Vec3Int(90, 180, 30);
+                            // forest colour
+                            else color = new Vec3Int(50, 150, 15);
+                        }
+                        // mountain colour (low)
+                        else if (hValue < 0.35) color = new Vec3Int(140, 140, 140);
+                        // mountain colour (high)
+                        else color = new Vec3Int(90, 90, 90);
+                        bmpRow[x * 4] = (byte)color.z;
+                        bmpRow[x * 4 + 1] = (byte)color.y;
+                        bmpRow[x * 4 + 2] = (byte)color.x;
+                        bmpRow[x * 4 + 3] = 255;
+                    }
+                }
+
+                bmp.UnlockBits(tmpBmp);
+
+
+                // Handle trees
+                for (int y = 0; y < h; y++)
+                {
+                    byte* bmpRow = (byte*)tmpBmp.Scan0 + (y * tmpBmp.Stride);
+                    for (int x = 0; x < w; x++)
+                    {
+                        double hValue = height.valueAt(x, y) + 0.05;
+                        if (hValue < 0.02 || hValue >= 0.25) continue;
+                        double rValue = rain.valueAt(x, y) + 1;
+                        if (random.NextDouble() < (Math.Min(rValue, 1.3) - 0.7) * 0.01)
+                        {
+                            Brush brush = new SolidBrush(Color.FromArgb(255, 30, 110, 0));
+                            g.FillRectangle(brush, new Rectangle(x - 3, y - 3, 6, 6));
+                        }
+                    }
+                }
+            }
+        }
+
         private void buttonEnergyEffect_Click(object sender, EventArgs e)
         {
             mode = PerlinMode.energy;
@@ -359,6 +435,12 @@ namespace PerlinDemoForms
         {
             mode = PerlinMode.mountains;
             MountainsEffect.initialize();
+        }
+
+        private void buttonTerrainEffect_Click(object sender, EventArgs e)
+        {
+            mode = PerlinMode.terrain;
+            TerrainEffect.newTerrain();
         }
     }
 }

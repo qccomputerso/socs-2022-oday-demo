@@ -11,7 +11,7 @@ namespace Logic
         {
             double d = (
                 (Math.Abs(a * a * a) * 100 + 1000) *
-                (Math.Abs(b * b * b) * 100 + 1000)
+                (Math.Abs(b * b) * 100 + 1000)
             ) * seed * 15485863;
             return (d * d * d % 2038074743) / 2038074743;
         }
@@ -72,8 +72,8 @@ namespace Logic
         {
             double d = (
                 (Math.Abs(a * a * a) * 100 + 1000) *
-                (Math.Abs(b * b * b) * 100 + 1000) *
-                (Math.Abs(c * c * c) * 100 + 1000)
+                (Math.Abs(b * b) * 100 + 1000) *
+                (Math.Abs(c * c * c * c) * 100 + 1000)
             ) * seed * 15485863;
             return (d * d * d % 2038074743) / 2038074743;
         }
